@@ -1,0 +1,103 @@
+version: '3'
+
+tasks:
+  # 默认任务
+  default:
+    desc: 显示所有可用任务
+    cmds:
+      - task --list-all
+
+  # 运行服务
+  run:
+    desc: 启动HTTP服务
+    cmds:
+      - echo "🚀 启动服务..."
+      - go run main.go
+
+  # 构建项目
+  build:
+    desc: 构建可执行文件
+    cmds:
+      - echo "🔨 构建项目..."
+      - go build -o bin/demo-go main.go
+    sources:
+      - main.go
+      - go.mod
+      - go.sum
+    generates:
+      - bin/demo-go
+
+  # 运行构建后的程序
+  start:
+    desc: 构建并运行程序
+    deps: [build]
+    cmds:
+      - echo "🎯 运行构建后的程序..."
+      - ./bin/demo-go
+
+  # 清理构建文件
+  clean:
+    desc: 清理构建文件
+    cmds:
+      - echo "🧹 清理构建文件..."
+      - rm -rf bin/
+      - go clean
+
+  # 运行测试
+  test:
+    desc: 运行测试
+    cmds:
+      - echo "🧪 运行测试..."
+      - go test ./...
+
+  # 格式化代码
+  fmt:
+    desc: 格式化代码
+    cmds:
+      - echo "✨ 格式化代码..."
+      - go fmt ./...
+
+  # 检查代码
+  check:
+    desc: 检查代码
+    cmds:
+      - echo "🔍 检查代码..."
+      - go vet ./...
+
+  # 获取依赖
+  deps:
+    desc: 获取和整理依赖
+    cmds:
+      - echo "📦 获取依赖..."
+      - go mod tidy
+      - go mod download
+
+  # 开发模式（监听文件变化自动重启）
+  dev:
+    desc: 开发模式 - 监听文件变化自动重启
+    cmds:
+      - echo "🔄 开发模式启动..."
+      - air
+
+  # 安装依赖
+  install:
+    desc: 安装项目依赖
+    cmds:
+      - echo "📦 安装依赖..."
+      - go mod download
+
+  # 检查代码质量
+  lint:
+    desc: 代码质量检查
+    cmds:
+      - echo "🔍 代码质量检查..."
+      - go vet ./...
+      - go fmt -n .
+      - echo "✅ 代码质量检查完成"
+
+  # 完整构建流程
+  all:
+    desc: 完整构建流程
+    deps: [deps, fmt, check, test, build]
+    cmds:
+      - echo "✅ 构建完成！" 

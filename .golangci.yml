@@ -1,0 +1,25 @@
+run:
+  timeout: 5m
+  modules-download-mode: readonly
+
+linters:
+  enable:
+    - gofmt
+    - goimports
+    - govet
+    - errcheck
+    - staticcheck
+    - unused
+    - gosimple
+
+linters-settings:
+  gofmt:
+    simplify: true
+  goimports:
+    local-prefixes: demo-go
+
+issues:
+  exclude-rules:
+    - path: _test\.go
+      linters:
+        - errcheck 
